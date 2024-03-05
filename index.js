@@ -8,19 +8,11 @@ const {
   UserRoute,
   AuthRoute,
   SocialRoutes,
-  CourseRoutes,
-  BillRoute,
-  ExamRoutes,
-  QuestionRoutes,
-  TakeExamRoutes,
-  QuestionBankRoutes,
   StatisticRoutes,
   UploadRoutes,
-  AssignmentRoutes,
-  SubmitAssignmentRoutes,
   AdminRoutes,
-  LessonRoutes,
-  CertificateRoutes
+  DocumentRoutes,
+  TemplateRoutes
 } = require('./routers');
 
 const { notFound, errorHandler } = require("./routers/errorMiddleware");
@@ -125,19 +117,11 @@ app.use(morgan('combined'))
 app.use('/api/auth', AuthRoute)
 app.use('/api/user', UserRoute)
 app.use('/api/social', SocialRoutes)
-app.use('/api/course', CourseRoutes)
-app.use('/api/payment', BillRoute)
-app.use('/api/exam', ExamRoutes)
-app.use("/api/question", QuestionRoutes)
-app.use("/api/takeexam", TakeExamRoutes)
-app.use("/api/questionbank", QuestionBankRoutes)
 app.use("/api/statistic", StatisticRoutes)
 app.use("/api/upload", UploadRoutes)
-app.use("/api/assignment", AssignmentRoutes)
-app.use("/api/submitassignment", SubmitAssignmentRoutes)
 app.use("/api/admin", AdminRoutes)
-app.use("/api/lesson", LessonRoutes)
-app.use("/api/certificate", CertificateRoutes)
+app.use("/api/document", DocumentRoutes)
+app.use("/api/template", TemplateRoutes)
 
 app.use(notFound);
 app.use(errorHandler);

@@ -7,8 +7,6 @@ const generator = require("generate-password");
 const { ROLES, STATUS, TYPE_ACCOUNT } = require("../utils/enum");
 const { generateAccessToken, generateRefreshToken, generateToken } = require("../services/jwtService");
 const AuthController = {
-
-
     RegisterUser: async (req, res) => {
         try {
             const { username, password, fullname, email, role } = req.body

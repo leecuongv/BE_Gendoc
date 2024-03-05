@@ -9,8 +9,6 @@ const moment = require("moment/moment");
 const { response } = require("express");
 
 const AdminController = {
-
-
     updateStatus: async (req, res) => {
         try {
 

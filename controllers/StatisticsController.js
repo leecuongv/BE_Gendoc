@@ -444,12 +444,11 @@ const StatisticController = {
             let updateAccountAmount = 0
             let purchaseCourseAmount = 0
             let listPayments = await Bill.find({ status: STATUS.SUCCESS })
-            var tempTotalRevenue = 0
-            let listpc = []
+            //let listpc = []
             listPayments.forEach((item, index) => {
                 if (item.description.includes("Mua")) {
                     purchaseCourseAmount += item.amount * FEE.FEE / 100
-                    listpc.push(item.id)
+                    //listpc.push(item.id)
                 }
                 if (item.description.includes("Nâng")) {
                     updateAccountAmount += item.amount
@@ -467,22 +466,6 @@ const StatisticController = {
 
     GetTotalRevenueByDay: async (req, res) => {
         try {
-            // let listPayments = await Bill.find()
-            // listPayments = listPayments.map(item => {
-            //     return {
-            //         item,
-            //         dateAdd: format(item.createdAt, 'yyyy-MM-dd')
-            //     }
-            // })
-            // var result = [];
-            // listPayments.reduce(function (res, value) {
-            //     if (!res[value.dateAdd]) {
-            //         res[value.dateAdd] = { dateAdd: value.dateAdd, amount: 0 };
-            //         result.push(res[value.dateAdd])
-            //     }
-            //     res[value.dateAdd].amount += value.item.amount;
-            //     return res;
-            // }, {});
             let listBillUpgradeAccount = await Bill.aggregate([
                 {
                     $match: {
@@ -657,7 +640,7 @@ const StatisticController = {
                 }
             ]
             )
-            var countTakeExams = 0
+            let countTakeExams = 0
             listExam.forEach((item) => {
                 countTakeExams += item.countTakeExam
             })
@@ -716,7 +699,7 @@ const StatisticController = {
             ]
             )
 
-            var countSubmitAssignments = 0
+            let countSubmitAssignments = 0
             listAssignment.forEach((item) => {
                 countSubmitAssignments += item.countSubmitAssignment
             })
