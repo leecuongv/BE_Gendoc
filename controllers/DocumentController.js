@@ -7,7 +7,7 @@ const fs = require("fs");
 const path = require("path");
 const reader = require('xlsx')
 const expressionParser = require("docxtemplater/expressions.js");
-
+const topdf = require('docx2pdf-converter')
 const http = require('http');
 const axios = require('axios');
 
@@ -35,7 +35,6 @@ const DocumentController = {
 
             expressionParser.filters.sum = function (input, field) {
                 if (!input) return input;
-
                 return input.reduce(function (sum, object) {
                     return sum + object[field];
                 }, 0);
@@ -58,28 +57,33 @@ const DocumentController = {
                 type: "nodebuffer",
                 compression: "DEFLATE",
             });
-            let outputTmpPath = linkOutput + "\\" + name;
+            let outputTmpPath = linkOutput + path.sep + name;
 
             let fileName = path.basename(outputTmpPath).split(".")[0];
             let fileExtension = path.extname(outputTmpPath).replace(".", "");
             let directoryPath = path.dirname(outputTmpPath);
 
-            let newPath = directoryPath + "\\" + fileName + "." + fileExtension;
+            let newPath = directoryPath + path.sep + fileName + "." + fileExtension;
             if (fs.existsSync(outputTmpPath)) {
                 let newName = fileName;
-                newPath = directoryPath + "\\" + newName + "." + fileExtension;
+                newPath = directoryPath + path.sep + newName + "." + fileExtension;
                 let index = 1;
                 while (fs.existsSync(newPath)) {
                     index++;
                     let newName2 = fileName + "(" + index + ")";
-                    newPath = directoryPath + "\\" + newName2 + "." + fileExtension;
-
+                    newPath = directoryPath + path.sep + newName2 + "." + fileExtension;
                 }
             }
 
             console.log(newPath);
-            fs.writeFileSync(path.resolve(newPath), buf);
+            let docxFile = newPath.replace("pdf", "docx")
+            fs.writeFileSync(path.resolve(docxFile), buf);
 
+            if (fileExtension == "pdf") {
+                console.log("haha " + docxFile);
+                topdf.convert(path.resolve(docxFile), path.resolve(newPath), true)
+                fs.unlinkSync(path.resolve(docxFile));
+            }
             const document = new Document({ name, comment, creator: "63414e7fd302008763538e62", link });
             let error = document.validateSync()
             if (error) {

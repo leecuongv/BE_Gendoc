@@ -19,7 +19,9 @@
         "cookie-parser": "^1.4.6",
         "cors": "^2.8.5",
         "deta": "^1.1.0",
+        "docx": "^8.5.0",
         "docx-pdf": "^0.0.1",
+        "docx2pdf-converter": "^1.1.0",
         "docxtemplater": "^3.46.0",
         "docxtemplater-image-module": "^3.1.0",
         "docxtemplater-image-module-pwndoc": "github:pwndoc/docxtemplater-image-module-pwndoc",
@@ -33,6 +35,7 @@
         "googleapis": "^101.0.0",
         "helmet": "^5.0.2",
         "jsonwebtoken": "^8.5.1",
+        "jszip": "^3.10.1",
         "jwt-decode": "^3.1.2",
         "libreoffice-convert": "^1.5.1",
         "mammoth": "^1.7.0",
@@ -43,6 +46,7 @@
         "nodemailer": "^6.7.2",
         "nodemailer-express-handlebars": "^5.0.0",
         "nodemon": "^2.0.20",
+        "officegen": "^0.6.5",
         "pandoc": "^0.2.0",
         "passport": "^0.6.0",
         "passport-google-oauth20": "^2.0.0",
@@ -50,6 +54,7 @@
         "pdfkit": "^0.14.0",
         "pizzip": "^3.1.6",
         "qs": "^6.7.0",
-        "xlsx": "^0.18.5"
+        "xlsx": "^0.18.5",
+        "xml2js": "^0.6.2"
     }
 }

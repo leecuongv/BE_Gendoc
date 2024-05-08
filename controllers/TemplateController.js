@@ -12,7 +12,6 @@ const TemplateController = {
     Create: async (req, res) => {
         try {
             const username = req.user?.sub
-
             if (!username) return res.status(400).json({ message: "Không có người dùng" })
             const user = await User.findOne({ username })
             if (!user) return res.status(400).json({ message: "Không có người dùng" })
@@ -36,6 +35,7 @@ const TemplateController = {
             return res.status(500).json({ message: 'Lỗi thêm mẫu' });
         }
     },
+
     Get: async (req, res) => {
         try {
             const { id } = req.query;
@@ -50,6 +50,7 @@ const TemplateController = {
             return res.status(500).json({ message: 'Lỗi lấy mẫu' });
         }
     },
+
     AddField: async (req, res) => {
         try {
             const { id, field_id } = req.body;
@@ -70,8 +71,8 @@ const TemplateController = {
             console.log(error);
             return res.status(500).json({ message: 'Lỗi thêm trường' + error });
         }
-    }
-    ,
+    },
+
     GetList: async (req, res) => {
         try {
             const templates = await Template.find().populate('fields');
@@ -81,6 +82,7 @@ const TemplateController = {
             return res.status(500).json({ message: 'Lỗi lấy danh sách mẫu' });
         }
     },
+
     Update: async (req, res) => {
         try {
             const username = req.user?.sub
@@ -109,6 +111,7 @@ const TemplateController = {
         }
 
     },
+
     Delete: async (req, res) => {
         try {
             const username = req.user?.sub
@@ -157,10 +160,11 @@ const TemplateController = {
             const { filePath } = req.body;
 
             const fields = await extractFieldsFromWordFile(filePath);
+            let uniqueArray = [...new Set(fields)];
             let jsonObject = parseArrayToJSON(fields);
 
             console.log(jsonObject);
-            return res.status(200).json(fields);
+            return res.status(200).json(uniqueArray);
         } catch (error) {
             console.log(error);
             return res.status(500).json({ message: 'Lỗi lấy danh sách trường', error });
@@ -181,7 +185,8 @@ function extractFieldsFromWordFile(filePath) {
             mammoth.extractRawText({ path: filePath })
                 .then(result => {
                     const text = result.value;
-                    const regex = /{([^{}]*)}/g; // Regex để tìm các trường trong dấu {}
+                    //const regex = /{([^{}]*)}/g; // Regex để tìm các trường trong dấu {}
+                    const regex = /«(.*?)»/g; // Regex để tìm các trường trong dấu {}
                     const fields = [];
                     let match;
                     while ((match = regex.exec(text)) !== null) {
@@ -202,7 +207,7 @@ function extractFieldsFromWordFile(filePath) {
                         // };
                         // if (field.type !== "text")
                         if (!match[1].includes("$"))
-                            fields.push(match[1]);
+                            fields.push("field_" + match[1]);
 
                     }
                     resolve(fields);
