@@ -10,19 +10,36 @@ const expressionParser = require("docxtemplater/expressions.js");
 const topdf = require('docx2pdf-converter')
 const http = require('http');
 const axios = require('axios');
-
+const ImageModule = require('docxtemplater-image-hyperlink-module-free');
 
 const DocumentController = {
     Create: async (req, res) => {
         try {
-
             const { name, comment, data, link, linkTemplate, linkOutput } = req.body;
-
-
             const content = fs.readFileSync(
                 path.resolve(linkTemplate),
                 "binary"
             );
+            //add image
+            const imageOpts = {
+                centered: true, // Set to true to always center images
+                fileType: "docx", // Or pptx
+                getImage: function (tagValue, tagName) {
+                    return fs.readFileSync(tagValue);
+                },
+                getSize: function (img, tagValue, tagName) {
+                    return [150, 150];
+                },
+                getProps: function (tagValue, tagName) {
+                    if (tagName === 'image') {
+                        return {
+                            link: 'https://domain.example',
+                        };
+                    }
+                    return null;
+                }
+            };
+
             const zip = new PizZip(content);
             expressionParser.filters.upper = function (input) {
                 if (!input) return input;
@@ -46,11 +63,13 @@ const DocumentController = {
             };
 
             const doc = new Docxtemplater(zip, {
+                modules: [new ImageModule(imageOpts)],
                 parser: expressionParser,
                 linebreaks: true,
                 paragraphLoop: true
             },
-            );
+            )
+
 
             doc.render(data);
             const buf = doc.getZip().generate({
