@@ -4,6 +4,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
+const path = require('path');
 const {
   UserRoute,
   AuthRoute,
@@ -30,7 +31,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const URI = process.env.MONGODB_URI;
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true, limit: '5mb' }))//Giới hạn kích thước request gửi lên server phải nhỏ hơn 3mb
+app.use(bodyParser.urlencoded({ extended: true, limit: '5mb' }))
 app.use(fileupload());
 
 const limiter = rateLimit({

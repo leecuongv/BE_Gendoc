@@ -82,6 +82,20 @@ const TemplateController = {
             return res.status(500).json({ message: 'Lỗi lấy danh sách mẫu' });
         }
     },
+    Upload: async (req, res) => {
+        let sampleFile;
+        let uploadPath;
+        if (!req.files || Object.keys(req.files).length === 0) {
+            return res.status(400).send('No files were uploaded.');
+        }
+        sampleFile = req.files.file;
+        uploadPath = __dirname + path.sep + "public" + path.sep + sampleFile.name;
+        sampleFile.mv(uploadPath, function (err) {
+            if (err)
+                return res.status(500).json(err);
+            return res.status(200).json({ filePath: uploadPath });
+        });
+    },
 
     Update: async (req, res) => {
         try {
