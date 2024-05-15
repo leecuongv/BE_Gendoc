@@ -11,7 +11,8 @@ const topdf = require('docx2pdf-converter')
 const http = require('http');
 const axios = require('axios');
 const ImageModule = require('docxtemplater-image-hyperlink-module-free');
-
+const moment = require('moment');
+const { upper, lower, size, sum, average, formatDate, max, min, area, perimeter, mul, where } = require('./handler/Expression');
 const DocumentController = {
     Create: async (req, res) => {
         try {
@@ -22,44 +23,73 @@ const DocumentController = {
             );
             //add image
             const imageOpts = {
-                centered: true, // Set to true to always center images
-                fileType: "docx", // Or pptx
+                centered: true,
+                fileType: "docx",
                 getImage: function (tagValue, tagName) {
                     return fs.readFileSync(tagValue);
                 },
                 getSize: function (img, tagValue, tagName) {
-                    return [150, 150];
+                    //  console.log(tagValue, tagName);
+                    //console.log("img", img);
+                    if (tagName == "image") {
+                        return [100, 100];
+                    }
+                    const sizeOf = require("image-size");
+                    const sizeObj = sizeOf(img);
+                    //console.log(sizeObj);
+                    const forceWidth = 200;
+                    const ratio = forceWidth / sizeObj.width;
+                    return [
+                        forceWidth,
+                        Math.round(sizeObj.height * ratio),
+                    ];
                 },
                 getProps: function (tagValue, tagName) {
-                    if (tagName === 'image') {
-                        return {
-                            link: 'https://domain.example',
-                        };
-                    }
+                    // if (tagName === 'image') {
+                    //     return {
+                    //         link: 'https://domain.example',
+                    //     };
+                    // }
                     return null;
                 }
             };
 
             const zip = new PizZip(content);
             expressionParser.filters.upper = function (input) {
-                if (!input) return input;
-                return input.toUpperCase();
+                return upper(input);
             };
             expressionParser.filters.lower = function (input) {
-                if (!input) return input;
-                return input.toLowerCase();
+                return lower(input);
             };
-
+            expressionParser.filters.size = function (input) {
+                return size(input);
+            };
             expressionParser.filters.sum = function (input, field) {
-                if (!input) return input;
-                return input.reduce(function (sum, object) {
-                    return sum + object[field];
-                }, 0);
+                return sum(input, field);
+            };
+            expressionParser.filters.average = function (input, field) {
+                return average(input, field);
+            };
+            expressionParser.filters.formatDate = function (input, format) {
+                return formatDate(input, format);
+            };
+            expressionParser.filters.max = function (input, field) {
+                return max(input, field);
+            };
+            expressionParser.filters.min = function (input, field) {
+                return min(input, field);
+            };
+            expressionParser.filters.area = function (...numbers) {
+                return area(...numbers);
+            };
+            expressionParser.filters.perimeter = function (...numbers) {
+                return perimeter(...numbers);
+            };
+            expressionParser.filters.mul = function (input, field) {
+                return mul(input, field);
             };
             expressionParser.filters.where = function (input, query) {
-                return input.filter(function (item) {
-                    return expressions.compile(query)(item);
-                });
+                return where(input, query);
             };
 
             const doc = new Docxtemplater(zip, {
@@ -69,7 +99,6 @@ const DocumentController = {
                 paragraphLoop: true
             },
             )
-
 
             doc.render(data);
             const buf = doc.getZip().generate({
@@ -187,9 +216,7 @@ const DocumentController = {
             return err
         })
         return res.status(200).json(post_req)
-
     }
-
 }
 module.exports = { DocumentController };
 function removeNull(obj) {
