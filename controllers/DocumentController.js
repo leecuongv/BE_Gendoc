@@ -12,7 +12,7 @@ const http = require('http');
 const axios = require('axios');
 const ImageModule = require('docxtemplater-image-hyperlink-module-free');
 const moment = require('moment');
-const { upper, lower, size, sum, average, formatDate, max, min, area, perimeter, mul, where } = require('./handler/Expression');
+const { upper, lower, size, sum, average, formatDate, max, min, area, perimeter, mul, where, parseImageString } = require('./handler/Expression');
 const DocumentController = {
     Create: async (req, res) => {
         try {
@@ -29,19 +29,11 @@ const DocumentController = {
                     return fs.readFileSync(tagValue);
                 },
                 getSize: function (img, tagValue, tagName) {
-                    //  console.log(tagValue, tagName);
-                    //console.log("img", img);
-                    if (tagName == "image") {
-                        return [100, 100];
-                    }
-                    const sizeOf = require("image-size");
-                    const sizeObj = sizeOf(img);
-                    //console.log(sizeObj);
-                    const forceWidth = 200;
-                    const ratio = forceWidth / sizeObj.width;
+                    const config = parseImageString(img, tagName);
+                    console.error("image confi: " + config);
                     return [
-                        forceWidth,
-                        Math.round(sizeObj.height * ratio),
+                        config.width,
+                        config.height
                     ];
                 },
                 getProps: function (tagValue, tagName) {
@@ -123,7 +115,6 @@ const DocumentController = {
                 }
             }
 
-            console.log(newPath);
             let docxFile = newPath.replace("pdf", "docx")
             fs.writeFileSync(path.resolve(docxFile), buf);
 
