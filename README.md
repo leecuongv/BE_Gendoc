@@ -32,3 +32,4 @@ TensorFlow hoặc PyTorch: Hai framework phổ biến để xây dựng và hu�
 Hugging Face Transformers: Thư viện này cung cấp các mô hình NLP tiên tiến đã được huấn luyện sẵn và có thể tinh chỉnh cho nhiệm vụ của bạn.
 HTML/CSS/JavaScript: Để tạo giao diện người dùng và triển khai mô hình.
 
+## Thêm cơ chế phân loại và bảo vệ tài liệu

@@ -8,6 +8,10 @@ const mammoth = require("mammoth");
 const fs = require("fs");
 const path = require("path");
 const e = require('express');
+const PizZip = require("pizzip");
+const Docxtemplater = require("docxtemplater");
+const InspectModule = require("docxtemplater/js/inspect-module.js");
+const iModule = InspectModule();
 const TemplateController = {
     Create: async (req, res) => {
         try {
@@ -146,42 +150,30 @@ const TemplateController = {
             return res.status(500).json({ message: 'Lỗi xóa mẫu' });
         }
     },
-    GetListField: async (req, res) => {
-        try {
-            const { filePath } = req.body;
-
-            const fields = await extractFieldsFromWordFile(filePath);
-            let jsonObject = [];
-            fields.forEach(element => {
-                if (element.type === "text") {
-                    let field = { name: element.name, type: element.type };
-                    jsonObject = { ...field, ...jsonObject };
-                }
-                else
-                    if (element.type === "loop") {
-                        jsonObject.push({ name: element.name, type: element.type });
-                    }
-            });
-            console.log(jsonObject);
-            return res.status(200).json(fields);
-        } catch (error) {
-            console.log(error);
-            return res.status(500).json({ message: 'Lỗi lấy danh sách trường', error });
-        }
-    },
     GetSampleObject: async (req, res) => {
+
         try {
-            const { filePath } = req.body;
+            const { linkTemplate } = req.body;
+            const content = fs.readFileSync(
+                path.resolve(linkTemplate),
+                "binary"
+            );
 
-            const fields = await extractFieldsFromWordFile(filePath);
-            let uniqueArray = [...new Set(fields)];
-            let jsonObject = parseArrayToJSON(fields);
+            const zip = new PizZip(content);
 
-            console.log(jsonObject);
-            return res.status(200).json(uniqueArray);
-        } catch (error) {
-            console.log(error);
-            return res.status(500).json({ message: 'Lỗi lấy danh sách trường', error });
+            const doc = new Docxtemplater(zip, {
+                modules: [iModule],
+            },
+            )
+
+            const tags = iModule.getAllTags();
+            console.log(typeof tags);
+            console.log(JSON.stringify(tags));
+
+            return res.status(200).json({ message: "Get fields of document successfully!", fields: tags });
+        }
+        catch (err) {
+            return res.status(500).json({ message: err.message, stackTrace: err.stack, properties: err.properties });
         }
     }
 
@@ -189,89 +181,4 @@ const TemplateController = {
 
 module.exports = { TemplateController };
 
-function extractFieldsFromWordFile(filePath) {
-    return new Promise((resolve, reject) => {
-        fs.readFile(filePath, "utf8", (err, data) => {
-            if (err) {
-                reject(err);
-                return;
-            }
-            mammoth.extractRawText({ path: filePath })
-                .then(result => {
-                    const text = result.value;
-                    //const regex = /{([^{}]*)}/g; // Regex để tìm các trường trong dấu {}
-                    const regex = /«(.*?)»/g; // Regex để tìm các trường trong dấu {}
-                    const fields = [];
-                    let match;
-                    while ((match = regex.exec(text)) !== null) {
 
-                        // let type = 'text';
-                        // if (isConditionField(match[1])) {
-                        //     type = 'open condition';
-                        // }
-                        // if (match[1].includes("/")) {
-                        //     type = 'close condition';
-                        // }
-                        // if (match[1].includes("#")) {
-                        //     type = 'loop';
-                        // }
-                        // let field = {
-                        //     name: match[1].toString().replace(/#|\/|$|^|/g, ''),
-                        //     type: type
-                        // };
-                        // if (field.type !== "text")
-                        if (!match[1].includes("$"))
-                            fields.push("field_" + match[1]);
-
-                    }
-                    resolve(fields);
-                })
-                .catch(err => {
-                    reject(err);
-                });
-        });
-    });
-    function isConditionField(field) {
-        const operations = ["<", ">", "=", "&", "^"];
-        for (let i = 0; i < operations.length; i++) {
-            if (field.includes(operations[i])) {
-                return true;
-            }
-        }
-        return false;
-    }
-    function isLoopField(field) {
-        return field.includes("#");
-    }
-    function isCloseConditionField(field) {
-        return field.includes("/");
-    }
-
-
-}
-function parseArrayToJSON(arr, index = 0) {
-    const jsonObject = {};
-    let currentObject = jsonObject;
-
-    while (index < arr.length) {
-        const item = arr[index];
-
-        if (item.startsWith('#') || item.startsWith('^')) {
-            const key = item.substring(1);
-            currentObject[key] = parseArrayToJSON(arr, index + 1);
-
-            while (arr[index] !== '/') {
-                index++;
-            }
-        } else if (item === '/') {
-            return jsonObject;
-        } else {
-            const [key, modifier] = item.split(' | ');
-            currentObject[key] = modifier === 'upper' ? '' : null;
-        }
-
-        index++;
-    }
-
-    return jsonObject;
-}

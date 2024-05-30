@@ -1,0 +1,6 @@
+projectKey=NeoGenDoc
+serverUrl=http://10.6.28.135:9000
+serverVersion=9.9.0.65466
+dashboardUrl=http://10.6.28.135:9000/dashboard?id=NeoGenDoc
+ceTaskId=AY_Iysf1HVH2hW4iH1u5
+ceTaskUrl=http://10.6.28.135:9000/api/ce/task?id=AY_Iysf1HVH2hW4iH1u5

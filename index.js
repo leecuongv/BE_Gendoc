@@ -73,12 +73,12 @@ app.use(
 app.use(helmet.contentSecurityPolicy({
   useDefaults: false,
   directives: {
-    defaultSrc: ["'self'"],  // default value for all directives that are absent
-    scriptSrc: ["'self' https://maxcdn.bootstrapcdn.com"],   // helps prevent XSS attacks
-    frameAncestors: ["'self'"],  // helps prevent Clickjacking attacks
+    defaultSrc: ["'self'"],
+    scriptSrc: ["'self' https://maxcdn.bootstrapcdn.com"],
+    frameAncestors: ["'self'"],
     styleSrc: ["'self' https://maxcdn.bootstrapcdn.com"],
     fontSrc: ["'self' https://maxcdn.bootstrapcdn.com"],
-    formAction: ["'self' http://localhost:5000 https://sandbox.vnpayment.vn/paymentv2/vpcpay.html"],
+    formAction: ["'self' https://sandbox.vnpayment.vn/paymentv2/vpcpay.html"],
     objectSrc: ["'none'"]
   }
 }))

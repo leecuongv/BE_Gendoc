@@ -13,31 +13,40 @@ function size(input) {
     return input.length;
 };
 
-function sum(input, field) {
+function sum_by(input, ...field) {
     if (!input) return input;
     return input.reduce(function (sum, object) {
-        console.log("sum: " + sum);
-        console.log("object: " + JSON.stringify(object));
-        console.log("field: " + field);
         return sum + object[field];
     }, 0);
 };
+
+//sum_by qty 
+function sum_by_qty(input, field, qty) {
+    if (!input) return input;
+    return input.reduce(function (sum, object) {
+        return sum + object[field] * object[qty];
+    }, 0);
+};
+
+
 function average(input, field) {
     if (!input) return input;
     return input.reduce(function (sum, object) {
         return sum + object[field];
     }, 0) / input.length;
 };
-function formatDate(input, format) {
+function format_date(input, format) {
     if (!input) return input;
     const date = new Date(input);
-    console.log(format);
-    console.log(date);
     var result = moment(date.toISOString()).format(format);
-    console.log(result)
     return result;
 };
 
+function to_fixed(input, precision) {
+    if (!input) return input;
+
+    return input.toFixed(precision);
+}
 function max(input, field) {
     if (!input || input.length === 0) return 0;
     return Math.max(...input.map(object => object[field]));
@@ -48,7 +57,6 @@ function min(input, field) {
 };
 
 function area(...numbers) {
-    //console.log("area:" + numbers)
     return numbers.reduce((total, num) => total * num);
 };
 
@@ -60,6 +68,11 @@ function mul(input, field) {
     return input.reduce(function (sum, object) {
         return sum * object[field]
     });
+};
+
+function sort_by(input, ...fields) {
+    if (!input) return input;
+    return sort_by(input, fields);
 };
 
 function where(input, query) {
@@ -89,6 +102,7 @@ function parseImageString(img, imageString) {
         console.log("Only name and height" + matchnh)
         const imageName = matchnh[1];
         const forceHeight = parseInt(matchnh[2], 10);
+
         const sizeObj = sizeOf(img);
         const ratio = forceHeight / sizeObj.height;
 
@@ -119,7 +133,44 @@ function parseImageString(img, imageString) {
         width: 100
     };
 
-
-
 }
-module.exports = { upper, lower, size, sum, average, formatDate, max, min, area, perimeter, mul, where, parseImageString };
+
+function getHttpData(url, callback) {
+    (url.substr(0, 5) === "https" ? https : http)
+        .request(url, function (response) {
+            if (response.statusCode !== 200) {
+                return callback(
+                    new Error(
+                        `Request to ${url} failed, status code: ${response.statusCode}`
+                    )
+                );
+            }
+
+            const data = new Stream();
+            response.on("data", function (chunk) {
+                data.push(chunk);
+            });
+            response.on("end", function () {
+                callback(null, data.read());
+            });
+            response.on("error", function (e) {
+                callback(e);
+            });
+        })
+        .end();
+}
+function base64DataURLToArrayBuffer(dataURL) {
+    const base64Regex = /^data:image\/(png|jpg|svg|svg\+xml);base64,/;
+    if (!base64Regex.test(dataURL)) {
+        return null;
+    }
+    const stringBase64 = dataURL.replace(base64Regex, "");
+    let binaryString;
+    if (typeof window !== "undefined") {
+        binaryString = window.atob(stringBase64);
+    } else {
+        binaryString = Buffer.from(stringBase64, "base64")
+    }
+    return binaryString;
+}
+module.exports = { upper, lower, size, sum_by, average, format_date, max, min, area, perimeter, mul, where, parseImageString, sort_by, to_fixed, getHttpData, base64DataURLToArrayBuffer, sum_by_qty };
