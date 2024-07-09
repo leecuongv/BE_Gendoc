@@ -1,6 +1,4 @@
 const mongoose = require("mongoose");
-const autoinc = require("mongoose-plugin-autoinc");
-const { formatTimeUTC } = require("../utils/Timezone");
 const { COLLECTION, QUESTIONTYPE } = require("../utils/enum");
 const Answer = require("./Answer");
 
@@ -29,13 +27,12 @@ const questionSchema = mongoose.Schema({
   maxPoints: {
     type: Number,
     default: 1,
-  }, 
+  },
 },
   {
     timestamps: true, toObject: {
       transform: function (doc, ret) {
         ret.id = ret._id
-        // delete ret._id;
       }
     }
   });

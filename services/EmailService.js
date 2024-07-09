@@ -27,7 +27,7 @@ const createTransporter = async () => {
     });
 
 
-    var transporter = nodemailer.createTransport({ // config mail server
+    let transporter = nodemailer.createTransport({ // config mail server
         service: 'gmail',
         host: "smtp.gmail.com",
         port: 465,
@@ -60,7 +60,7 @@ const createTransporter = async () => {
 
 
 const sendMail = async (to, subject, activeLink, username) => {
-    var emailOptions = { // thiết lập đối tượng, nội dung gửi mail
+    let emailOptions = { // thiết lập đối tượng, nội dung gửi mail
         from: 'Hệ thống thi trắc nghiệm Bello Quiz',
         to: to,
         subject: subject,
@@ -77,7 +77,7 @@ const sendMail = async (to, subject, activeLink, username) => {
 }
 
 const sendMailResetPassword = async (to, subject, activeLink, username) => {
-    var emailOptions = { // thiết lập đối tượng, nội dung gửi mail
+    let emailOptions = { // thiết lập đối tượng, nội dung gửi mail
         from: '"Hệ thống thi trắc nghiệm Bello Quiz" <server10.noreply@gmail.com>',
         to: to,
         subject: subject,
@@ -92,4 +92,4 @@ const sendMailResetPassword = async (to, subject, activeLink, username) => {
     let emailTransporter = await createTransporter()
     return emailTransporter.sendMail(emailOptions)
 }
-module.exports = { sendMail,sendMailResetPassword }
+module.exports = { sendMail, sendMailResetPassword }

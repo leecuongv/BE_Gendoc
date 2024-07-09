@@ -23,7 +23,6 @@ mongoose.connect(URI)
         const admin = await adminRole.save()
         await userRole.save()
         await teacherRole.save()
-        //const roles = await Role.find({ name: ROLES.ADMIN });
         const salt = await bcrypt.genSalt(10);
         const hash = await bcrypt.hash("12345678", salt);
         const adminAcc = new User({

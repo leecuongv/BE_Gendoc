@@ -233,7 +233,7 @@ const AuthController = {
 
     ResetPassword: async (req, res) => {
         try {
-            const { token, newPassword, cfPassword } = req.body;
+            const { token, newPassword } = req.body;
             if (token) {
                 jwt.verify(token, process.env.JWT_ACCESS_KEY, async (err, user) => {
                     if (err) {

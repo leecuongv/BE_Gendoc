@@ -19,7 +19,6 @@ const datetimeFormat = function (date, format) {
     let hour = date.getHours()
     let minute = date.getMinutes()
     let second = date.getSeconds()
-    let millisecond = date.getMilliseconds()
 
     if (month < 10) month = '0' + month
     if (day < 10) day = '0' + day
@@ -31,8 +30,8 @@ const datetimeFormat = function (date, format) {
         return '' + year + month + day + hour + minute + second
     }
     else if (format === 'HHmmss') {
-        return '' +  hour + minute + second
+        return '' + hour + minute + second
     }
 }
 
-module.exports = {formatTimeUTC,datetimeFormat,formatTimeUTC_}
+module.exports = { formatTimeUTC, datetimeFormat, formatTimeUTC_ }

@@ -1,7 +1,6 @@
 import bcrypt from "bcrypt";
 import { User } from '../models/User.js';
 import { STATUS, TYPE_ACCOUNT } from '../utils/enum.js';
-import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import passport from 'passport';
 import * as PassportGoogle from 'passport-google-oauth20';

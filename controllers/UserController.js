@@ -135,7 +135,7 @@ const UserController = {
     updatePassword: async (req, res) => {
         try {
             const username = req.user?.sub
-            const { password, newPassword, cfPassword } = req.body
+            const { password, newPassword } = req.body
             const salt = await bcrypt.genSalt(10);
             const hash = await bcrypt.hash(newPassword, salt);
             const data = {
