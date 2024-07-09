@@ -15,6 +15,7 @@ const axios = require('axios');
 const ImageModule = require('docxtemplater-image-hyperlink-module-free');
 const moment = require('moment');
 const { upper, lower, size, sum_by, average, format_date, max, min, area, perimeter, mul, where, parseImageString, sort_by, to_fixed, getHttpData, base64DataURLToArrayBuffer, sum_by_qty } = require('./handler/Expression');
+const { generateNewPath } = require('./handler/FileHandler');
 const DocumentController = {
     Create: async (req, res) => {
         try {
@@ -140,17 +141,7 @@ const DocumentController = {
             let fileExtension = path.extname(outputTmpPath).replace(".", "");
             let directoryPath = path.dirname(outputTmpPath);
 
-            let newPath = directoryPath + path.sep + fileName + "." + fileExtension;
-            if (fs.existsSync(outputTmpPath)) {
-                let newName = fileName;
-                newPath = directoryPath + path.sep + newName + "." + fileExtension;
-                let index = 1;
-                while (fs.existsSync(newPath)) {
-                    index++;
-                    let newName2 = fileName + "(" + index + ")";
-                    newPath = directoryPath + path.sep + newName2 + "." + fileExtension;
-                }
-            }
+            let newPath = generateNewPath(directoryPath, fileName, fileExtension);
 
             let docxFile = newPath.replace("pdf", "docx")
             fs.writeFileSync(path.resolve(docxFile), buf);
