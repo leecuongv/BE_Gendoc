@@ -29,7 +29,10 @@ const AdminController = {
             const { username, role } = req.body;
 
             if (username) {
-                const newUser = await User.updateOne({ username }, { role: role }, { new: true })
+                const query = {
+                    username, role: role, new: true
+                }
+                const newUser = await User.updateOne(query)
                 if (newUser)
                     return res.status(200).json({ message: "Cập nhật quyền thành công" })
 
