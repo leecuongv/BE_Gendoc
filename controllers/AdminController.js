@@ -102,7 +102,8 @@ const AdminController = {
 
             return res.status(200).json({ message: "Cập nhật trạng thái giao dịch thành công!" })
         } catch (error) {
-
+            console.log(error)
+            res.status(400).json({ message: "Lỗi lấy danh sách người dùng" })
         }
     },
     ViewTransactionHistory: async (req, res) => {
@@ -113,7 +114,8 @@ const AdminController = {
 
             return res.status(200).json(transactionHistory)
         } catch (error) {
-
+            console.log(error)
+            res.status(400).json({ message: "Lỗi lấy danh sách người dùng" })
         }
     }
 

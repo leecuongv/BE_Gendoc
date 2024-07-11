@@ -31,7 +31,7 @@ const AuthController = {
                 birthday: new Date()
             });
 
-            let temp = (await User.findOne({ username: username }))
+            let temp = (await User.findOne({ username: username.toString() }))
             if (temp) {
                 return res.status(400).json({ username: "Username đã tồn tại" })
             }
@@ -41,7 +41,7 @@ const AuthController = {
                     message: error.errors['email']?.message || error.errors['username']?.message
                 })
 
-            temp = await User.findOne({ email: req.body.email, type: TYPE_ACCOUNT.NORMAL })
+            temp = await User.findOne({ email: req.body.email.toString(), type: TYPE_ACCOUNT.NORMAL })
             if (temp) {
                 return res.status(400).json({ username: "Email đã tồn tại" })
             }
@@ -65,7 +65,7 @@ const AuthController = {
     LoginUser: async (req, res) => {
         try {
             const { username, password } = req.body
-            const user = await User.findOne({ username: username })
+            const user = await User.findOne({ username: username.toString() })
 
             if (!user) {
                 return res.status(404).json({ message: "Sai tên đăng nhập hoặc mật khẩu" })
@@ -100,7 +100,7 @@ const AuthController = {
     LoginAdmin: async (req, res) => {
         try {
             const { username, password } = req.body
-            const user = await User.findOne({ username: username, role: ROLES.ADMIN })
+            const user = await User.findOne({ username: username.toString(), role: ROLES.ADMIN })
 
             if (!user) {
                 return res.status(404).json({ message: "Sai tên đăng nhập hoặc mật khẩu" })
@@ -204,7 +204,7 @@ const AuthController = {
         try {
             const email = req.query.email;
             if (email) {
-                const user = await User.findOne({ email: email })
+                const user = await User.findOne({ email: email.toString() })
                 if (user) {
                     const resetCode = generateToken({
                         id: user.id.toString()
@@ -342,7 +342,7 @@ const AuthController = {
     checkUsername: async (req, res) => {
         try {
             const username = req.body.username;
-            const user = await User.findOne({ username: username })
+            const user = await User.findOne({ username: username.toString() });
             if (user)
                 return res.status(200).json({ message: "Tên đăng nhập đã tồn tại trong hệ thống", valid: false })
             return res.status(200).json({ message: "Tên đăng nhập hợp lý", valid: true })
@@ -355,7 +355,7 @@ const AuthController = {
     checkEmail: async (req, res) => {
         try {
             const email = req.body.email;
-            const user = await User.findOne({ email: email, type: TYPE_ACCOUNT.NORMAL })
+            const user = await User.findOne({ email: email.toString(), type: TYPE_ACCOUNT.NORMAL })
             if (user)
                 return res.status(200).json({ message: "Email đã tồn tại trong hệ thống", valid: false })
             return res.status(200).json({ message: "Email hợp lý", valid: true })
