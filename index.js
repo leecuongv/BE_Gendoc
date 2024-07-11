@@ -4,12 +4,10 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
-const path = require('path');
 const {
   UserRoute,
   AuthRoute,
   SocialRoutes,
-  StatisticRoutes,
   UploadRoutes,
   AdminRoutes,
   DocumentRoutes,
@@ -120,7 +118,6 @@ app.use(morgan('combined'))
 app.use('/api/auth', AuthRoute)
 app.use('/api/user', UserRoute)
 app.use('/api/social', SocialRoutes)
-app.use("/api/statistic", StatisticRoutes)
 app.use("/api/upload", UploadRoutes)
 app.use("/api/admin", AdminRoutes)
 app.use("/api/document", DocumentRoutes)
