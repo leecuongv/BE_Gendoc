@@ -18,7 +18,7 @@ const SocialController = {
             const url = new URL(fixedURL)
             if (schemesList.includes(url.protocol) && domainsList.includes(url.hostname)) {
                 try {
-                    const response = await axios.get(url, { headers: { Authorization: `Bearer ${accessToken.toString()}` } },)
+                    const response = await axios.get(url, { headers: { Authorization: `Bearer ${accessToken}` } })
                     const profile = response.data
                     const existingUser = await User.findOne({ socialId: profile.sub })
 
