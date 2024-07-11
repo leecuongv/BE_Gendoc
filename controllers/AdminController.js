@@ -30,7 +30,7 @@ const AdminController = {
 
             if (username) {
                 const query = {
-                    username, role: role, new: true
+                    username: username.toString(), role: role.toString(), new: true
                 }
                 const newUser = await User.updateOne(query)
                 if (newUser)
