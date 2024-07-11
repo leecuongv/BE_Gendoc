@@ -19,7 +19,7 @@ const SocialController = {
             const auth = "Bearer " + accessToken
             if (schemesList.includes(url.protocol) && domainsList.includes(url.hostname)) {
                 try {
-                    const response = await axios.get(fixedURL, { headers: { Authorization: auth } })
+                    const response = await axios.get(url)
                     if (response.statusCode !== 200) {
                         return res.status(401).json({ message: "Invalid access token" });
                     }
