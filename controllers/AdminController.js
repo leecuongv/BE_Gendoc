@@ -95,7 +95,7 @@ const AdminController = {
         try {
             const { transactionId, isTransferred } = req.body
 
-            const transactionHistory = await TransactionHistory.findOneAndUpdate({ transactionId: transactionId }, { isTransferred }, { new: true })
+            const transactionHistory = await TransactionHistory.findOneAndUpdate({ transactionId: transactionId.toString() }, { isTransferred: isTransferred.toString() }, { new: true })
 
             if (!transactionHistory)
                 return res.status(400).json({ message: "Không tồn tại giao dịch!" })
