@@ -170,7 +170,7 @@ const AuthController = {
         try {
             const email = req.body.email;
             if (email) {
-                const user = await User.findOne({ email: email })
+                const user = await User.findOne({ email: email.toString() })
                 if (user) {
                     if (user.status === STATUS.ACTIVE)
                         return res.status(400).json({ message: "Tài khoản đã được kích hoạt" })
