@@ -16,9 +16,10 @@ const SocialController = {
             const domainsList = ["https://www.googleapis.com/oauth2/v3/userinfo"];
             const fixedURL = "https://www.googleapis.com/oauth2/v3/userinfo"
             const url = new URL(fixedURL)
+            const auth = "Bearer" + accessToken
             if (schemesList.includes(url.protocol) && domainsList.includes(url.hostname)) {
                 try {
-                    const response = await axios.get(fixedURL, { headers: { Authorization: `Bearer ${accessToken}` } })
+                    const response = await axios.get(fixedURL, { headers: { Authorization: auth } })
                     const profile = response.data
                     const existingUser = await User.findOne({ socialId: profile.sub })
 
