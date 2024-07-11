@@ -12,11 +12,24 @@ const SocialController = {
     LoginGoogle: async (req, res) => {
         try {
             let { accessToken } = req.body
-            const response = await axios.get(
-                'https://www.googleapis.com/oauth2/v3/userinfo',
-                { headers: { Authorization: `Bearer ${accessToken.toString()}` } },
-            )
-            const profile = response.data
+            const schemesList = ["http:", "https:"];
+            const domainsList = ["trusted1.example.com", "trusted2.example.com"];
+            const url = "https://www.googleapis.com/oauth2/v3/userinfo"
+            let profile = null
+            if (schemesList.includes(url.protocol) && domainsList.includes(url.hostname)) {
+                try {
+                    const response = await axios.get(url, { headers: { Authorization: `Bearer ${accessToken.toString()}` } },)
+                    profile = response.data
+                } catch (error) {
+                    console.error(error)
+                    return res.status(500).json({ username: "Lỗi đăng nhập" })
+                }
+
+            }
+            else {
+                res.status(500).json({ username: "Lỗi tạo tài khoản" })
+            }
+
 
             const existingUser = await User.findOne({ socialId: profile.sub })
 
