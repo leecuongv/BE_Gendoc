@@ -20,6 +20,10 @@ const SocialController = {
             if (schemesList.includes(url.protocol) && domainsList.includes(url.hostname)) {
                 try {
                     const response = await axios.get(fixedURL, { headers: { Authorization: auth } })
+                    if (response.statusCode !== 200) {
+                        return res.status(401).json({ message: "Invalid access token" });
+                    }
+
                     const profile = response.data
                     const existingUser = await User.findOne({ socialId: profile.sub })
 
