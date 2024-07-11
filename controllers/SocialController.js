@@ -13,7 +13,7 @@ const SocialController = {
         try {
             let { accessToken } = req.body
             const schemesList = ["http:", "https:"];
-            const domainsList = ["trusted1.example.com", "trusted2.example.com"];
+            const domainsList = ["https://www.googleapis.com/oauth2/v3/userinfo"];
             const url = new URL("https://www.googleapis.com/oauth2/v3/userinfo")
             let profile = null
             if (schemesList.includes(url.protocol) && domainsList.includes(url.hostname)) {
@@ -27,7 +27,7 @@ const SocialController = {
 
             }
             else {
-                res.status(500).json({ username: "Lỗi tạo tài khoản" })
+                return res.status(500).json({ username: "Lỗi tạo tài khoản" })
             }
 
 
