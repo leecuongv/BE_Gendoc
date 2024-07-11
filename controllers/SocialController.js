@@ -14,7 +14,8 @@ const SocialController = {
             let { accessToken } = req.body
             const schemesList = ["http:", "https:"];
             const domainsList = ["https://www.googleapis.com/oauth2/v3/userinfo"];
-            const url = new URL("https://www.googleapis.com/oauth2/v3/userinfo")
+            const fixedURL = "https://www.googleapis.com/oauth2/v3/userinfo"
+            const url = new URL(fixedURL)
             let profile = null
             if (schemesList.includes(url.protocol) && domainsList.includes(url.hostname)) {
                 try {
