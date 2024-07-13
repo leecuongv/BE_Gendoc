@@ -132,9 +132,6 @@ const DocumentController = {
                 type: "nodebuffer",
                 compression: "DEFLATE",
             });
-            //const tags = iModule.getAllTags();
-            //console.log(typeof tags);
-            //console.log(JSON.stringify(tags));
             let outputTmpPath = linkOutput + path.sep + name;
 
             let fileName = path.basename(outputTmpPath).split(".")[0];
@@ -182,8 +179,6 @@ function convertToJSON(inputString) {
     inputString = inputString.replace(/’/g, "'");
 
     inputString = inputString.replace(/'/g, '"');
-
-    //inputString = inputString.replace(/" NamSinhKhachHang "/g, '"NamSinhKhachHang"');
 
     try {
         console.log('inputString:', JSON.stringify(inputString));
