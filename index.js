@@ -77,8 +77,7 @@ app.use(helmet.contentSecurityPolicy({
     styleSrc: ["'self' https://maxcdn.bootstrapcdn.com"],
     fontSrc: ["'self' https://maxcdn.bootstrapcdn.com"],
     formAction: ["'self' https://sandbox.vnpayment.vn/paymentv2/vpcpay.html"],
-    objectSrc: ["'none'"],
-    blockAllMixedContent: []
+    objectSrc: ["'none'"]
   }
 
 }))
