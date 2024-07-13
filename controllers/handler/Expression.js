@@ -57,7 +57,7 @@ function min(input, field) {
 };
 
 function area(...numbers) {
-    return numbers.reduce((total, num) => total * num, 0);
+    return numbers.reduce((total, num) => total * num);
 };
 
 function perimeter(...numbers) {
